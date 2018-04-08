@@ -1,0 +1,46 @@
+@import './normalize';
+@import './iconfont';
+@import './toast';
+@import './tabbar';
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: #c2c2c2;
+}
+
+/*修改占位符颜色*/
+
+::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #999;
+  font-size: 100%;
+}
+
+html {
+  background: #f0f0f0;
+  box-sizing: border-box;
+  font-family: 'Microsoft Yahei';
+  color: #3A3633;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+  font-family: 'Microsoft Yahei';
+}
+
+a:-webkit-any-link {
+  color: inherit;
+}
+
+
+

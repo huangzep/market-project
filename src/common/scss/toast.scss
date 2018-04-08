@@ -1,0 +1,118 @@
+.vux-toast {
+  .weui-toast {
+    background: rgba(0, 0, 0, .6);
+    width: 6rem !important;
+    line-height: 0.533333rem;
+    border-radius: 5px;
+    p {
+      padding: 0.586667rem !important;
+      color: #fff;
+      line-height: 1.3;
+    }
+  }
+}
+
+// 签到页弹框样式
+.layui-m-layersection{
+  .layui-m-anim-up{
+    -webkit-animation-name: layui-m-anim-scale;
+    animation-name: layui-m-anim-scale;
+  }
+  .layui-m-layerchild{
+    width: 80%!important;
+    h3{
+      height: 50px;
+      line-height: 50px;
+      .fc-orange{
+        color: #ff9933;
+      }
+    }
+    // 弹框默认样式
+    .layui-m-layercont{
+      padding:0 18px 18px;
+      .con{
+        max-height: 300px;
+        overflow-y: scroll;
+        text-align: left;
+        .award{
+          padding-left: 10px;
+          .fc-orange{
+            color: #ff9933;
+          }
+          .fc-blue{
+            color: #5d9bf1;
+          }
+          .fc-999{
+            color: #999;
+          }
+        }
+        .hint{
+          margin-top:10px;
+          color: #999;
+          .fc-red{
+            color: #dd2726;
+          }
+        }
+      }
+    }
+    // 弹框规则
+    .layercont-rule{
+      .fc-orange{
+        color: #ff9933;
+      }
+      .rules-list{
+        padding-top: 6px;
+        word-break: break-all;
+        line-height: 19px;
+        font-size: 13.2px;
+      }
+      .tips{
+        color: #372929;
+        font-size: 12px;
+        line-height: 19px;
+        padding-top: 8px;
+        .fc-blue{
+          color: #5d9bf1;
+        }
+      }
+      .rule-remark{
+        h1{
+          margin-top: 10px;
+          font-size: 14px;
+          color: #2a2a2a;
+        }
+      }
+    }
+    // 温馨提示
+    .layercont-warm-prompt{
+      text-align: center;
+      font-size: 16px;
+      padding: 16px 0 25px;
+    }
+    // 关注公众号
+    .layercont-attention{
+      padding-top: 20px;
+      img{
+        width: 160px;
+        height: 160px;
+      }
+      .txt{
+        color: #686868;
+        padding: 3px 0 5px 0;
+        font-size: 15px;
+      }
+    }
+    .layui-m-layerbtn{
+      background: #fff!important;
+      border-top: 1px solid #EBEBEB!important;
+      span{
+        border-left:1px solid #EBEBEB!important;
+        color: #646464;
+      }
+      span:nth-child(2),span:only-child{
+        color: #dd2726;
+      }
+    }
+  }
+}
+  
