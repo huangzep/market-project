@@ -72,7 +72,7 @@
     	<div class="reason">{{ShRemark}}</div>
     </div>
 		<div class="submit" @click="submit" v-show="!voted" v-light>{{ revote ? '重新提交报名' : '提交报名'}}</div>
-		<div class="copy-container" v-show="false">
+		<div class="copy-container">
 	    <copy-right></copy-right>
 	  </div>
   </div>
@@ -320,8 +320,9 @@
 .vapply {
 	margin-bottom: 50px;
 	overflow: hidden;
+	background-color: #f7f7f7;
 	.title {
-		background: url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #fff;
+		background: url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #f7f7f7;
     border-bottom: 1px solid #e7e7e7;
     line-height: 44px;
     height: 44px;
@@ -382,7 +383,7 @@
 		.pic-container {
 			padding: 12px 0px;
 			background-color: #fff;
-	    background: url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px,url(~common/imgs/bottom_line.png) no-repeat scroll left bottom / 100% 1px #fff;
+	    background: url(~common/imgs/bottom_line.png) no-repeat scroll left bottom / 100% 1px #fff;
 			.tit {
 				line-height: 18px;
 		    font-size: 15px;

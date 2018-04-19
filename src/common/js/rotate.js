@@ -2,6 +2,7 @@
 import {prefixStyle} from 'common/js/dom'
 
 const transform = prefixStyle('transform')
+
 export default {
 	rotate(el, start, end, callback, duration) {
 		this.$el = el

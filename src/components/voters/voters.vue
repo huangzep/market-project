@@ -2,14 +2,16 @@
 	<div class="voters">
 		<ul ref="items">
 			<li ref="item" v-for="(item, index) in vlist" :key="item.Id">
-				<x-img :src="item.UserImage"  :offset="10000"
-				@on-success="success" @on-error="success" 
-				@click.native="link(item)"></x-img>
-				<div class="content">
-					<p class="p1">{{item.Votes}}票</p>
-					<p class="p2">{{item.UserName}}</p>
-					<p class="p3">编号：{{item.UserNum}}</p>
-					<span class="tou" @click="link(item)"  v-show="canVote">投TA一票</span>
+				<div class="wrapper">
+					<x-img :src="item.UserImage"  :offset="10000"
+					@on-success="success" @on-error="success" 
+					@click.native="link(item)"></x-img>
+					<div class="content">
+						<p class="p1">{{item.Votes}}票</p>
+						<p class="p2">{{item.UserName}}</p>
+						<p class="p3">编号：{{item.UserNum}}</p>
+						<span class="tou" @click="link(item)"  v-show="canVote">投TA一票</span>
+					</div>
 				</div>
 			</li>
 		</ul>
@@ -44,14 +46,13 @@
     		if (!val.length) return;
     		this.loadNum = 0
     		this.$refs.items.style.opacity = 0
-				this.$vux.loading.show({text: 'Loading'})
 				console.log(this.loadNum)
 				this.loadNum = val.reduce((accu, cur) => {
 					return this.reuse[cur.Id] ? accu + 1 : accu
 				}, 0)
 				console.log(this.loadNum)
 				if (this.loadNum === val.length) {
-					this.$nextTick(() => {setTimeout(() => {this.waterFall()}, 400)})
+					this.$nextTick(() => {setTimeout(() => {this.waterFall()}, 200)})
 				} 
 				this.reused(val)
     	}
@@ -75,11 +76,10 @@
 				this.loadNum++
 				console.log(this.loadNum)
 				if (this.loadNum === this.vlist.length) {
-					this.$nextTick(() => {setTimeout(() => {this.waterFall()}, 400)})
+					this.$nextTick(() => {setTimeout(() => {this.waterFall()}, 200)})
 				}
 			},
 			waterFall() {
-				this.$vux.loading.hide()
 				this.$refs.items.style.opacity = 1
 				let itemW = this.$refs.item[0].clientWidth
 				let itemY = []
@@ -133,16 +133,21 @@
 		overflow: hidden;
 		li {
 			width: 50%;
-			padding: 0 3px;
+			padding: 3px;
 			position: absolute;
+	    .wrapper {
+	    	border: 1px solid #eee;
+	    }
 			img {
 				display: block;
 				width: 100%;
-				margin-bottom: 10px;
+			}
+			.content {
+				padding: 0 8px 12px;
+				text-align: center;
 			}
 			p {@include ellipsis();}
 			.p1 {
-				text-align: center;
 		    color: #dd2726;
 		    font-size: 15px;
 		    padding-top: 4px;
@@ -150,10 +155,12 @@
 			.p2 {
 				color: #2a2a2a;
 		    font-size: 15px;
+		    text-align: left;
 			}
 			.p3 {
 		    color: #acacac;
 		    font-size: 14px;
+		    text-align: left;
 			}
 			.tou {
 				line-height: 28px;

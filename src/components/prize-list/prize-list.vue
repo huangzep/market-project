@@ -46,7 +46,7 @@
 		methods: {
 			exchange(item) {
 				if (this.hasGift) {
-					this.$emit('exchange', item.ID, item.Image)
+					this.$emit('exchange', item.ID, item.Image, item)
 				} else {
 					this.$vux.toast.text('亲，集满所有字才能兑换奖品哦~~')
 				}				

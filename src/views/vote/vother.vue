@@ -18,7 +18,7 @@
 					</div>
 					<ul class="act">
 						<li v-for="item in voteList">
-							<div class="pic" @click="$router.push({path: '/vote/vhome', query: {m, aid: item.Id}})">
+							<div class="pic" @click="link(item)">
 								<img :src="item.VoteImage" alt="">
 								<span>活动时间：{{item.StartTime}}-{{item.EndTime}}</span>
 							</div>
@@ -51,9 +51,10 @@
 	import wxMixin from '@/mixins/wxMixin'
 	import scrollMixin from '@/mixins/scrollMixin'
 	import {getVoteList} from 'services/voteApi'
+	import {getWxdata} from 'services/wxApi'
 
 	export default {
-		mixins: [scrollMixin, wxMixin],
+		mixins: [scrollMixin],
 		data: () => ({ 
 			tabIndex: 0,
 			voteList: [],
@@ -73,6 +74,7 @@
     created() {
     	this.m = this.$route.query.m
     	this._getVoteList()
+    	this._wxShare()
     },
     mounted() {
 
@@ -101,6 +103,43 @@
 				this.page = 1
 				this._getVoteList()
 			},
+			link(item) {
+				window.location.href=item.ActivityLink
+			},
+			_wxShare() {
+	      let self = this
+	      let data
+	      getWxdata(null, location.href, null, this.m).then(res => {
+	        data = res.return_data
+	        self.$wechat.config({
+	          debug: false, // 开启调试模式
+	          appId: data.appid, // 必填，公众号的唯一标识
+	          timestamp: data.timestamp, // 必填，生成签名的时间戳
+	          nonceStr: data.noncestr, // 必填，生成签名的随机串
+	          signature: data.signature, // 必填，签名
+	          jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] 
+	        })
+	        self.$wechat.ready(() => {
+	          self.$wechat.onMenuShareTimeline({ // 分享到朋友圈
+	            title: data.sharetext, // 分享标题
+	            link: data.sharelink, // 分享链接
+	            imgUrl: data.shareimg, // 分享图标
+	            success: function() {
+	              // 用户确认分享后执行的回调函数
+	            },
+	            cancel: function() {
+	              // 用户取消分享后执行的回调函数
+	            }
+	          });
+	          self.$wechat.onMenuShareAppMessage({ // 分享给朋友
+	            title: data.sharetitle,
+	            desc: data.sharetext,
+	            link: data.sharelink,
+	            imgUrl: data.shareimg,
+	          });
+	        })
+	      })
+	    },
 		},
 		components: {
 			Tab,
@@ -122,6 +161,7 @@
 	.container {
 		.ended {
 			padding-top: 0.266667rem;
+			padding-bottom: 0.266667rem;
 			color: #999;
 			font-size: 0.346667rem;
 			text-align: center;
@@ -131,7 +171,8 @@
 		    padding-bottom: 10px;
 		    background: url(~common/imgs/bottom_line.png) no-repeat scroll left bottom / 100% 1px,url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #fff;
 		    &:first-child {
-			    margin-top: 10px;	
+			    padding-top: 10px;	
+			    background: url(~common/imgs/bottom_line.png) no-repeat scroll left bottom / 100% 1px #fff; 
 		    }
 		    .pic {
 		    	position: relative;
@@ -179,6 +220,7 @@
 		.daodi {
 			text-align: center;
 			line-height: 1.066667rem;
+			color: #999;
 		}
 		.no-activity {
 			display: flex;
@@ -201,7 +243,7 @@
 	}
 }
 .activity-content {
-	background-color: #fff;
+	background-color: #f7f7f7;
 	position: fixed;
 	top: 1.333333rem;
 	bottom: 0;

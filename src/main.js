@@ -3,8 +3,8 @@
 import Vue from 'vue'
 import App from 'views/App'
 import router from './router'
-import VConsole from 'vconsole'
-var vConsole = new VConsole();
+// import VConsole from 'vconsole'
+// var vConsole = new VConsole();
 import FastClick from 'fastclick'
 import './mixins/globalMixin.js'
 import 'common/scss/globalStyle.scss' 

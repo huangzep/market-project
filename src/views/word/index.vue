@@ -266,11 +266,14 @@
 					window.location.href = this.res.PointLink
 				} else if (this.actionId === 3) {
 					this.exchange()
-				}
+				} else if (this.actionId === 4) {
+					window.location.href = this.res.MyPrizeLink
+				} 
 			},
-			showEx(pid, giftImg) {
+			showEx(pid, giftImg, item) {
 				this.pid = pid
 				this.giftImg = giftImg
+				this.aliance = item
 				this.actionId = 3
 				this.hasCancel = true
 				this.confirmBtnText = '确定'
@@ -283,18 +286,36 @@
 					if (res.return_code === 0) {
 						this.returnLink = res.return_link ? res.return_link : this.res.MyPrizeLink
 						this.giftText = res.return_msg
-						setTimeout(() => {
-							this.$refs.gift.show()
-						}, 500)
+						if (this.aliance.Type === 5) {
+							this.showAliance(this.aliance)
+						} else {
+							setTimeout(() => { this.$refs.gift.show() }, 500)
+						}
 					}
-					// this.wordList.forEach(item => {
-					// 	item.Count--
-					// })
 					this._getAll()
 				}).catch(error => {
 					this.$vux.toast.text('网络连接失败，请稍后<br/>重试')
 				})				
 			},
+			showAliance(prize) {
+	      this.actionId = 4
+	      this.hasCancel = false
+	      this.confirmBtnText = '立即查看'
+	      this.confirmContent = 
+	      `<div class="card-prize-confirm">
+	        <h3 class="pname">联盟卡券</h3>
+	        <h5 class="pt">您获得的奖励如下：</h5>
+	        <div class="pcon">
+	          <img src="${prize.Image}" alt="" >
+	          <p>
+	            ${prize.Name}
+	          </p>
+	          <span>x1</span>
+	        </div>
+	        <h6 class="ptip"><span>* </span>请到个人中心 - 我的奖品查看到账情况</h6>
+	       </div>`
+	      this.$refs.confirm.show()
+	    },
 			//滚动到兑奖区
 			goPrize() {
 				this.$refs.scroll.scrollToElement(this.$refs.prizeContainer, 200)

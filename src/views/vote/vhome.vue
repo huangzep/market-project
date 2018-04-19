@@ -10,9 +10,9 @@
 			   	<!-- <span>正在进行</span> -->
 			   </div>
 			   <div class="activity-info">
-			   	<div class="name"><div class="left">活动名称：</div><div class="right">{{state.voteInfo.Title}}</div></div>
-			   	<div class="name"><div class="left">活动时间：</div><div class="right">{{state.voteInfo.StartTime}} ~ {{state.voteInfo.EndTime}}</div></div>
-			   	<div class="name"><div class="left">主办单位：</div><div class="right">{{state.voteInfo.HostName}}</div></div>
+			   	<div class="name title">{{state.voteInfo.Title}}</div>
+			   	<div class="name">主办单位: {{state.voteInfo.HostName}}<br/>
+			   	活动时间：{{state.voteInfo.StartTime}} - {{state.voteInfo.EndTime}}</div>
 			  </div>
 			  <ul class="number">
 			   	<li><p>{{state.voteInfo.CxTotal}}</p><p>参选数</p></li>
@@ -23,20 +23,20 @@
 			   	<div class="input"><input type="text" v-model="keyword" placeholder="输入名称或编号搜索" @focus="goup"><i v-show="keyword" @click="keyword = ''"></i></div>
 			   	<div class="btn" @click="search">搜索</div>
 			  </div>
-		    <div class="no-vote" :class="nonews.clsname" v-if="!total">
+		    <div class="no-vote" :class="nonews.clsname" v-if="total == 0">
 			   	<i></i>
 			   	<p class="p1">{{nonews.p1}}</p>
 			   	<p class="p2">{{nonews.p2}}</p>
 			   	<button @click="apply" v-light v-show="state.voteInfo.IsOpenSign">立即报名</button>
 			  </div>
-				<div class="voters-wrapper" v-else>
+				<div class="voters-wrapper" v-if="total > 0">
 				 	<voters :vlist="vlist" :canVote="canVote"></voters>
-				 	<div class="daodi" v-show="total !== 0 && total === vlist.length">
+				 	<!-- <div class="daodi" v-show="total !== 0 && total === vlist.length">
 						人家是有底线的~~
-					</div>
+					</div> -->
 				</div>
 				<!-- 底部版权 -->
-		    <div class="copy-container">
+		    <div class="copy-container" v-show="total >= 0">
 		      <copy-right></copy-right>
 		    </div>
 	    </div>
@@ -63,7 +63,7 @@
 			nonews: {clsname: 'no2', p1: '哎呀，还没有人参与评选呢', p2: '快来报名参加吧！'},  //搜索无内容提示语
 			keyword: '', //搜索关键词
 			page: 1, 
-			total: 0,
+			total: -1,
 		}),
     computed: {
     },
@@ -87,8 +87,7 @@
     },
     activated() {
     	if (this.$route.query.refresh) {
-    		this._getVoteInfo()
-    		this._getVoteUserList()
+    		this.refresh()
     	}
     },
 		methods: {
@@ -109,7 +108,7 @@
 			},
 			_getVoteUserList() {
 				this.update = true
-				this.$vux.loading.show({text: 'Loading'})
+				if (this.keyword) {this.$vux.loading.show({text: 'Loading'})}
 				getVoteUserList(this.aid, this.keyword, false, this.page).then(res => {
 					if (res.return_code === 0) {
 						this.vlist = (this.page === 1 ? res.return_data : [...this.vlist, ...res.return_data]) || []
@@ -138,18 +137,25 @@
 				}
 			},
 			refresh() {
+				this.once = false
 				this.keyword = ''
 				this.page = 1
 				this._getVoteInfo()
 	    	this._getVoteUserList()
 			},
 			loadMore() {
-				if (this.vlist.length >= this.total) return;
+				if (this.once) return;
+				if (this.vlist.length >= this.total) {
+					this.$vux.toast.text('没有更多内容了')
+					this.once = true
+					return;
+				}
 				this.page++
 				this.$vux.loading.show({text: 'Loading'})
 				this._getVoteUserList()
 			},
 			search() {
+				this.once = false
 				this.page = 1
 				this._getVoteUserList()
 			},
@@ -171,11 +177,10 @@
 <style lang="scss" scoped>
 @import '~common/scss/mixin';
 .vhome {
-	.vscroll {top: 0;}
+	.vscroll {top: 0;background-color: #f7f7f7;}
 	ul.number {
 		display: flex;
-		background-color: #fff;
-		margin-top: 0.053333rem;
+		background: url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #fff;
 		li {
 			flex: 1;
 			overflow: hidden;
@@ -290,11 +295,12 @@
 	}
 	.voters-wrapper {
 		background-color: #fff;
-		margin-bottom: 60px;
+		min-height: 300px;
 		.daodi {
 			text-align: center;
 			line-height: 1.066667rem;
-			background: url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #fff;
+			padding-bottom: 1.6rem;
+			color: #999;
 		}
 	}
 }

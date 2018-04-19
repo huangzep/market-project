@@ -1,5 +1,6 @@
 <template>
 	<div class="test" style="background: #fff;height: 1000px;">
+    <iframe width="400" height="800" src="http://192.168.5.121:3000/dist/page/%E5%85%A8%E6%B0%91%E9%9B%86%E5%8D%A1/%E6%96%B0%E5%BB%BA%E6%B4%BB%E5%8A%A8.html" frameborder="0"></iframe>
     <div class="" @click="change" style="height: 3434px;">
       {{res.a}}
     </div>
@@ -17,6 +18,7 @@
     <button @click="()=>{this.$refs.pop.show()}"></button>
     <pop ref="pop"></pop>
     <apply></apply>
+
 	</div>
 </template>
 

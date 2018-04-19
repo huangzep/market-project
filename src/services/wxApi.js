@@ -9,13 +9,14 @@ import xhr from './xhr/'
  * @param  {aid: 活动ID} 
  * @return {Promise}
  */
-export function getWxdata(aid, url, vid) {
+export function getWxdata(aid, url, vid, m) {
   return xhr({
     url: `/WX/Getwxdata`,
     params: {
       aid,
       url,
-      vid
+      vid,
+      m
     }
   })
 }
@@ -77,4 +78,16 @@ export function getGzStatus(actid) {
     }
   })
 }
-
+/**
+ * 获取商城信息
+ * @param  {aid: 活动ID} 
+ * @return {Promise}
+ */
+export function getMallInfo(m) {
+  return xhr({
+    url: `/Act/GetMallInfo`,
+    params: {
+      m
+    }
+  })
+}

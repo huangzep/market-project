@@ -10,7 +10,8 @@
             <div class="avatar"><img :src="res.CustomerHeadPath" alt=""></div>
             <div class="txt">
               <p class="p1">{{res.NickName}}</p>
-              <p class="p2">您今天是第<span>{{res.TodayOrder}}</span>位签到</p>
+              <p class="p2" v-if="res.IsSign==0">您今天还未签到</p>
+              <p class="p2" v-if="res.IsSign==1">您今天是第<span>{{res.TodayOrder}}</span>位签到</p>
               <p class="p3">已连续签到<span>{{res.SignDay}}</span>天</p>
             </div>
             <div class="tips" @click="ruleshow=true">签到规则</div>
@@ -125,7 +126,8 @@
 
         },
         created() {
-            this.aid = this.$route.query.aid;
+          this.$vux.loading.show({text: 'Loading'})
+          this.aid = this.$route.query.aid;
         },
         mounted() {
             var that = this;
@@ -210,6 +212,7 @@
                         // 上一个月点击
                         if(previous_btn[0]){
                             previous_btn[0].onclick = function(){ 
+                                that.$vux.loading.show({text: 'Loading'});
                                 if(caption_date[0].innerText.length==7){
                                     that.dateYear = parseInt(caption_date[0].innerText.substring(0,4));
                                     that.dateMonth = parseInt(caption_date[0].innerText.substring(5,6));
@@ -230,6 +233,7 @@
                         var next_btn = document.getElementsByClassName("k-btn-next-month"); 
                         if(next_btn[0]){
                             next_btn[0].onclick = function(){ 
+                                that.$vux.loading.show({text: 'Loading'});
                                 if(caption_date[0].innerText.length==7){
                                     that.dateYear = parseInt(caption_date[0].innerText.substring(0,4));
                                     that.dateMonth = parseInt(caption_date[0].innerText.substring(5,6));
@@ -280,10 +284,10 @@
                 clearTimeout(this.timer);
                 this.timer = setTimeout(() => {
                     var that = this;
+                    this.$vux.loading.show({text: 'Loading'});
                     that.getSignActInfoApi();
                     that.getSignExpandApi();
                     that.getSignApi();
-                    // this.$vux.loading.show({text: 'Loading'});
                     this.$refs.scroll.finishPullDown();
                 }, 20)
             },
@@ -296,6 +300,7 @@
                 var that = this;
                 if (that.flag) return;
                 if(that.res.IsSign==0){
+                  this.$vux.loading.show({text: 'Loading'});
                   that.flag = true;
                     setSign(that.aid).then(res => {
                         that.flag = false;
@@ -328,28 +333,50 @@
                       content+='<li><span class="fc-orange">'+setSignData[i].ShopVouAmount+'</span>元购物券</li>'
                     }if(setSignData[i].HBAmount>0){
                       if(setSignData[i].WxHbType==0){
-                        content+='<li><span class="fc-orange">'+setSignData[i].HBAmount+'</span>元微信红包</li>'
+                        if(setSignData[i].HBSend==1){
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount+'</span>元微信红包（请到公众号里领取）</li>';
+                        }else{
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount+'</span>元微信红包（红包在途中迷路了，请联系客服获取。）</li>';
+                        }
                       }else{
-                        content+='<li><span class="fc-orange">'+setSignData[i].HBAmount+'</span>元红包零钱</li>'
+                        if(setSignData[i].HBSend==1){
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount+'</span>元红包零钱（请到个人中心里领取）</li>';
+                        }else{
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount+'</span>元红包零钱（红包在途中迷路了，请联系客服获取。）</li>';
+                        }
                       }
                     }if(setSignData[i].ProductID!=0){
                       content+='<li>'+setSignData[i].ProductName;
-                      if(setSignData[i].ProductLink!=null&&setSignData[i].ProductLink!=""){
-                        content+='<a href='+setSignData[i].ProductLink+' class="fc-blue">立即领取>></a>';
+                      if(setSignData[i].ProductLink!=null&&setSignData[i].ProductLink!=""&&setSignData[i].IsUnionCoupons!=1){
+                        content+='（请到个人中心我的奖品里领取）<a href='+setSignData[i].ProductLink+' class="fc-blue">立即领取>></a>';
+                      }
+                      if(setSignData[i].ProductLink!=null&&setSignData[i].ProductLink!=""&&setSignData[i].IsUnionCoupons!=0){
+                        content+='（请到个人中心我的奖品查看到账情况）<a href='+setSignData[i].ProductLink+' class="fc-blue">查看>></a>';
                       }
                       content+='</li>';
                     }if(setSignData[i].ShopVouAmount_ts>0){
                       content+='<li><span class="fc-orange">'+setSignData[i].ShopVouAmount_ts+'</span>元购物券</li>'
                     }if(setSignData[i].HBAmount_ts>0){
                       if(setSignData[i].WxHbType_ts==0){
-                        content+='<li><span class="fc-orange">'+setSignData[i].HBAmount_ts+'</span>元微信红包</li>'
+                        if(setSignData[i].HBSend_ts==1){
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount_ts+'</span>元微信红包（请到公众号里领取）</li>';
+                        }else{
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount_ts+'</span>元微信红包（红包在途中迷路了，请联系客服获取。）</li>';
+                        }
                       }else{
-                        content+='<li><span class="fc-orange">'+setSignData[i].HBAmount_ts+'</span>元红包零钱</li>'
+                        if(setSignData[i].HBSend_ts==1){
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount_ts+'</span>元红包零钱（请到个人中心里领取）</li>';
+                        }else{
+                          content+='<li><span class="fc-orange">'+setSignData[i].HBAmount_ts+'</span>元红包零钱（红包在途中迷路了，请联系客服获取。）</li>';
+                        }
                       }
                     }if(setSignData[i].ProductID_ts!=0){
                       content+='<li>'+setSignData[i].ProductName_ts;
-                      if(setSignData[i].ProductLink_ts!=null&&setSignData[i].ProductLink_ts!=""){
-                        content+='<a href='+setSignData[i].ProductLink_ts+' class="fc-blue">立即领取>></a>';
+                      if(setSignData[i].ProductLink_ts!=null&&setSignData[i].ProductLink_ts!=""&&setSignData[i].IsUnionCoupons_ts!=1){
+                        content+='（请到个人中心我的奖品里领取）<a href='+setSignData[i].ProductLink_ts+' class="fc-blue">立即领取>></a>';
+                      }
+                      if(setSignData[i].ProductLink_ts!=null&&setSignData[i].ProductLink_ts!=""&&setSignData[i].IsUnionCoupons_ts!=0){
+                        content+='（请到个人中心我的奖品查看到账情况）<a href='+setSignData[i].ProductLink_ts+' class="fc-blue">查看>></a>';
                       }
                       content+='</li>';
                     }
@@ -470,7 +497,8 @@
                 this.$layer.dialog({
                     title: ['您已签到'], 
                     content: content,
-                    btn: ['知道了',this.res.BtnName]
+                    btn: ['知道了',this.res.BtnName],
+                    shadeClose: false,
                 })
                 // 如果有btn
                 .then(function (res){
@@ -1094,6 +1122,9 @@
           span {color: #FF4979;}
         }
         .time {
+          .time-box{
+            box-shadow: 0 0 5px rgba(255,69,122,.8);
+          }
         }
         &::after {
           background-image: url(~common/imgs/sign-cloud-pink.png)!important;
@@ -1139,6 +1170,9 @@
           span {color: #f26262;}
         }
         .time {
+          .time-box{
+            box-shadow: 0 0 5px rgba(64,184,146,.8);
+          }
         }
         &::after {
           background-image: url(~common/imgs/sign-cloud-green.png)!important;

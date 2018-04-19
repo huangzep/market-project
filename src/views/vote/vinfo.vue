@@ -104,18 +104,18 @@
 
 <style lang="scss">
 	.vinfo{
-		position: fixed;
-		top: 48px;
-		bottom: 50px;
-		left: 0;
-		right: 0;
-		overflow: scroll;
+		// position: fixed;
+		// top: 48px;
+		// bottom: 50px;
+		// left: 0;
+		// right: 0;
+		// overflow: scroll;
 		background-color: #fff;
+		margin-bottom: 50px;
 		.vinfo-wrapper {
 			background: url(~common/imgs/bottom_line.png) no-repeat scroll left bottom / 100% 1px,
 			url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #fff;
 			padding: .533333rem .266667rem .213333rem;
-			margin-bottom: .266667rem;
 		}
 		.vinfo-box{
 			line-height: .64rem;
@@ -233,6 +233,9 @@
 			    font-weight: 500;
 				}
 			}
+		}
+		.copy-container {
+			padding-bottom: 0;
 		}
 	}
 </style>

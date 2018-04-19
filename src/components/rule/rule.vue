@@ -5,7 +5,7 @@
                 签到规则
                 
                 <div class="ruleBtnBox">
-                    <img src="~common/imgs/vote-search-cancel.png" @click="closerule" alt="">
+                    <img src="~common/imgs/rule-close.png" @click="closerule" alt="">
                 </div>
             </div>
             <img :src="pimg('ruleTopBg.png')" alt="">
@@ -63,7 +63,7 @@
             <div class="ruleTitle">
                 补签卡规则
                 <div class="ruleBtnBox">
-                    <img src="~common/imgs/vote-search-cancel.png" @click="closerule" alt="">
+                    <img src="~common/imgs/rule-close.png" @click="closerule" alt="">
                 </div>
             </div>
             <img :src="pimg('ruleTopBg.png')" alt="">

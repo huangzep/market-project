@@ -1,6 +1,6 @@
 <template>
   <div class="copy-right">
-    <div class="nav">
+    <div class="nav" v-show="menuList.length">
       <a v-for="item in menuList" :href="item.Url" >{{item.MenuName}}</a>
     </div>
     <div class="company">
@@ -59,13 +59,15 @@
   .nav {
     display: flex;
     justify-content: center;
+    margin: 0 0.373333rem;
     a {
-      padding: 0.106667rem 0.266667rem 0.666667rem;
+      padding: 0.106667rem 0.266667rem 0.266667rem;
     }
   }
   .company {
     position: relative;
     font-size: 0.32rem;
+    margin-top: 0.293333rem;
     p {
       white-space: nowrap;
       margin: 0 auto;
@@ -86,7 +88,8 @@
     }
   }
   .surport {
-    padding-top: 0.106667rem;
+    padding-top: 8px;
+    margin-left: 15px;
     display: inline-block;
     text-align: center;
     position: relative;
@@ -99,7 +102,7 @@
       background-repeat: no-repeat;
       background-position: 0 0;
       background-size: 15px 11px;
-      top: 0.24rem;
+      top: 12px;
       left: -20px;
     }
   }
@@ -107,7 +110,7 @@
 /* 集字页面 */
 .m1 {
   .copy-right {
-    color: #666;
+    color: #999;
   }
   .company {
     a {
@@ -116,7 +119,7 @@
   }
   .surport {
     &::before {
-      background-image: url(~common/imgs/logo1.png);
+      background-image: url(~common/imgs/logo2.png);
     }
   }
 }
@@ -141,7 +144,7 @@
 /* 刮刮卡页面 */
 .card {
   .copy-right {
-    color: #666;
+    color: #999;
   }
   .company {
     a {
@@ -150,39 +153,47 @@
   }
   .surport {
     &::before {
-      background-image: url(~common/imgs/logo1.png);
+      background-image: url(~common/imgs/logo2.png);
     }
   }
 }
-/* 签到页面 */
+/* 投票 签到页面 */
+.vote, .vother, .sign, .fatechoice {
+  .copy-right {
+    color: #999;
+    background-color: #f7f7f7;
+    .nav {
+      color: #585858;
+      border-bottom: 1px solid #eee;
+    }
+  }
+  .company {
+    a {
+      background-image: url(~common/imgs/tousu2.png);
+    }
+  }
+  .surport {
+    &::before {
+      background-image: url(~common/imgs/logo2.png);
+      transform: scale(1.2);
+    }
+  }
+}
 .sign {
   .copy-right {
-    color: #666;
-  }
-  .company {
-    a {
-      background-image: url(~common/imgs/tousu2.png);
-    }
-  }
-  .surport {
-    &::before {
-      background-image: url(~common/imgs/logo1.png);
-    }
+    background: none;
   }
 }
-/* 投票页面 */
-.vote, .vother {
+/* 集卡页面 */
+.fate{
   .copy-right {
-    color: #666;
-  }
-  .company {
-    a {
-      background-image: url(~common/imgs/tousu2.png);
+    .nav {
+      border-bottom: 1px solid #eee;
     }
   }
   .surport {
     &::before {
-      background-image: url(~common/imgs/logo1.png);
+      transform: scale(1.2);
     }
   }
 }

@@ -27,7 +27,7 @@ export default {
       getWxdata(this.aid, location.href, this.vid).then(res => {
         data = res.return_data
         self.$wechat.config({
-          debug: true, // 开启调试模式
+          debug: false, // 开启调试模式
           appId: data.appid, // 必填，公众号的唯一标识
           timestamp: data.timestamp, // 必填，生成签名的时间戳
           nonceStr: data.noncestr, // 必填，生成签名的随机串

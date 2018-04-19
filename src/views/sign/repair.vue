@@ -3,7 +3,7 @@
 		<div class="header">
 			<img :src="pimg('supplyBg.png')" alt="">
 			<p class="rule" @click="ruleshow=true">规则说明</p>
-			<p class="title" v-if="res.SupplyCardNum!=0">你有{{res.SupplyCardNum}}张</p>
+			<p class="title" v-if="res.SupplyCardNum!=0">你有{{res.SupplyCardNum}}张补签卡</p>
 			<p class="title" v-else>你还没有补签卡</p>
 			<p class="tips">可选最近5天进行补签,1张补签1天<br>可增加连续签到天数，补签卡本活动才有效喔！</p>
 		</div>
@@ -105,6 +105,7 @@
 				}
 			},
 			setSupplySignApi:function(){
+				this.$vux.loading.show({text: 'Loading'});
 				this.pointMenusflag = true;
 				setSupplySign(this.aid,this.timeArr.toString()).then(res => {
 					this.pointMenusflag=false;
@@ -123,6 +124,7 @@
                 })	
 			},
 			getSupplyCardApiBtn:function(){//兑换补签卡
+				this.$vux.loading.show({text: 'Loading'});
 				this.flag = true
 				getSupplyCard(this.aid,this.pnum).then(res => {
 					this.flag = false
@@ -136,17 +138,8 @@
                     this.$vux.toast.text('网络连接失败，请稍后<br/>重试');
                 })	
 			},
-			getSupplyCardApi:function(){//兑换补签卡
-				getSupplyCard(this.aid,this.pnum).then(res => {
-                    if(res.return_code === 0){
-						this.$refs.menus.hide();
-						this.$vux.toast.text('兑换成功');
-                    }
-                }).catch(error => {
-                    this.$vux.toast.text('网络连接失败，请稍后<br/>重试');
-                })	
-			},
 			getSignActInfoApi:function(){//获取签到信息接口
+				this.$vux.loading.show({text: 'Loading'});
                 getSignActInfo(this.aid).then(res => {
                     if(res.return_code === 0){
                         var that = this;

@@ -4,12 +4,12 @@
 	  	<div class="vtop">
 		   	<img :src="res.VoteInfo.VoteImage" alt="">
 		   	<!-- <span>正在进行</span> -->
-		   </div>
-		   <div class="activity-info">
-		   	<div class="name"><div class="left">活动名称：</div><div class="right">{{res.VoteInfo.Title}}</div></div>
-		   	<div class="name"><div class="left">活动时间：</div><div class="right">{{res.VoteInfo.StartTime}} ~ {{res.VoteInfo.EndTime}}</div></div>
-		   	<div class="name"><div class="left">主办单位：</div><div class="right">{{res.VoteInfo.HostName}}</div></div>
 		  </div>
+		  <div class="activity-info">
+			   	<div class="name title">{{state.voteInfo.Title}}</div>
+			   	<div class="name">主办单位: {{state.voteInfo.HostName}}</div>
+			   	<div class="name">活动时间：{{state.voteInfo.StartTime}} ~ {{state.voteInfo.EndTime}}</div>
+			  </div>
 		  <div class="apply-info">
 		  	<h3>{{res.UserName}}</h3>
 		  	<p class="bianhao">编号：{{res.UserNum}}</p>
@@ -37,14 +37,14 @@
 		   	</div>
 		  </div>
 		  <div class="voters-wrapper">
-		  	<h5>看看谁给TA投了票</h5>
+		  	<h5>看看谁给TA投了票(每五分钟更新一次)</h5>
 		  	<div class="voters">
 		  		<ul v-if="userList.length">
 		  			<li v-for="item in userList">
 		  				<img :src="item.ImgPath" alt="">
 		  				<div class="info">
 		  					<div class="name">{{item.NickName}}</div>
-		  					<div class="time">{{item.AddTime}}</div>
+		  					<div class="time">{{item.AddTime.slice(0, -3)}}</div>
 		  				</div>
 		  			</li>
 		  		</ul>
@@ -76,7 +76,7 @@
 		  				<img :src="item.ImgPath" alt="">
 		  				<div class="info">
 		  					<div class="name">{{item.NickName}}</div>
-		  					<div class="time">{{item.AddTime}}</div>
+		  					<div class="time">{{item.AddTime.slice(0, -3)}}</div>
 		  				</div>
 		  			</li>
 		  		</ul>
@@ -185,7 +185,7 @@
 				voteForHim(this.aid, this.vid).then(res => {
 					this.flag = false
 					if (res.return_code === 0) {
-						this.count--
+						this.count = res.return_id //投票剩余票数
 						point = res.return_index //投票获取的积分
 						//IsDayTp: 每天重复投票：0 不开启  1 开启
 						if (this.res.VoteInfo.IsDayTp === 0 && this.count === 0) {
@@ -270,6 +270,7 @@
 @import '~common/scss/mixin';
 .vapplicant {
 	margin-bottom: 50px;
+	background-color: #f7f7f7;
 	.apply-info {
 		text-align: center;
 		background-color: #fff;
@@ -354,6 +355,7 @@
 	    background-color: #fff;
 	    margin-top: 10px;
 	    background: url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #fff;
+      font-size: 12px;
 		}
 		.voters {
 			ul {
@@ -380,12 +382,12 @@
 						background: url(~common/imgs/bottom_line.png) no-repeat scroll left bottom / 100% 1px #fff;
 						.name {
 							flex: 1;
-							max-width: 5.20rem;
+							max-width: 5.653333rem;
 							font-size: 14px;
 							@include ellipsis();
 						}
 						.time {
-					    min-width: 3.306667rem;
+					    min-width: 2.88rem;
 					    font-size: 12px;
 					    color: #a9a9a9;
 						}
@@ -435,6 +437,7 @@
 			text-align: center;
 			line-height: 1.066667rem;
 			background: url(~common/imgs/bottom_line.png) no-repeat scroll left top / 100% 1px #fff;
+			color: #999;
 		}
 	}
 	.copy-container {

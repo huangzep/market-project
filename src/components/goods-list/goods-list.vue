@@ -25,6 +25,7 @@
                             </p>
                             <div class="goods-buy">
                                 <em class="xian jiage">¥ {{item.OriginalPrice}}</em>
+                                <em class="xiaoliang" v-if="goodList.ShowSum==1">全网销量：{{item.SaleCounts}}</em>
                             </div>
                         </a>
                         </div>
@@ -163,7 +164,7 @@
                                 text-decoration:line-through;
                             }
                             .xiaoliang{
-                                display:none;
+                                margin-left: 5px;
                             }
                         }
                         .goods-title{ 

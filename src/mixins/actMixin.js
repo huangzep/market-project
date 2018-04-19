@@ -185,7 +185,7 @@ export default {
         this.showSorry()
         return;
       }
-      // 类型：0：产品 1：积分 2：购物券 3：微信红包 4红包零钱
+      // 类型：0：产品 1：积分 2：购物券 3：微信红包 4红包零钱  5联盟卡券
       if (prize.PrizeType === 0) {
         this.productId = opts.productId
         this.showProduct(prize)
@@ -205,6 +205,10 @@ export default {
       }
       if (prize.PrizeType === 4) {
         this.showHB(prize, '红包零钱', opts.amount, opts.msg)
+        return;
+      }
+      if (prize.PrizeType === 5) {
+        this.showAliance(prize)
         return;
       }
     },
@@ -249,6 +253,25 @@ export default {
       this.hasCancel = false
       this.confirmBtnText = '知道了'
       this.confirmContent = `<h4>${prize.Name}</h4><p style="text-align: left;">您获得的奖励如下：</p><p style="color: #FEAD60;text-align: left;padding-left: 0.266667rem;font-size: 0.346667rem;">${HB}&nbsp;&nbsp;￥${amount}</p><p style="color: #ccc;font-size: 0.32rem;text-align: left;line-height: 0.346667rem;"><span style="color: red;">*&nbsp;</span>${msg ? msg : '请到微信公众号领取'}</p>`
+      this.$refs.confirm.show()
+    },
+    showAliance(prize) {
+      this.actionId = 14
+      this.hasCancel = false
+      this.confirmBtnText = '立即查看'
+      this.confirmContent = 
+      `<div class="card-prize-confirm">
+        <h3 class="pname">${prize.Name}</h3>
+        <h5 class="pt">您获得的奖励如下：</h5>
+        <div class="pcon">
+          <img src="${prize.AwardPicture}" alt="" >
+          <p>
+            ${prize.ProductName}
+          </p>
+          <span>x1</span>
+        </div>
+        <h6 class="ptip"><span>* </span>请到个人中心 - 我的奖品查看到账情况</h6>
+       </div>`
       this.$refs.confirm.show()
     },
     //微信分享

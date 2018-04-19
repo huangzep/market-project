@@ -47,10 +47,12 @@
 	import scrollMixin from '@/mixins/scrollMixin'
 	import wxMixin from '@/mixins/wxMixin'
 	import {getVoteUserList} from 'services/voteApi'
+	import Store from '@/store/store'
 
 	export default {
 		mixins: [scrollMixin, wxMixin],
 		data: () => ({ 
+			state: Store.state,
 			vlist: [],
 			page: 1,  //默认请求第一页数据
 			total: 0,
@@ -59,7 +61,11 @@
 		
 		},
 		watch: {
-
+			'state.logoInfo'(val) {
+				if (!val.mallLink) {
+					this.$refs.scroll.$el.style.top = 0
+				}
+			}
 		},
 		created() {
 			this.aid = this.$route.query.aid
@@ -79,7 +85,7 @@
 				this.update = true
 				getVoteUserList(this.aid, '', true, this.page).then(res => {
 					if (res.return_code === 0) {
-						this.vlist = this.page === 1 ? res.return_data : [...this.vlist, ...res.return_data]
+						this.vlist = this.page === 1 ? (res.return_data || []) : [...this.vlist, ...(res.return_data || [])]
 						this.total = res.totalCount
 						console.log(this.vlist)
 					}

@@ -10,7 +10,7 @@
       <div class="after-trigger" v-if="!beforePullDown && (pulldown === 'stop')">
         <div v-if="isPullingDown" class="loading">
           <div class="loadgif">
-						<img src="~common/imgs/loading.gif" width="24" height="24">
+						<img src="~common/imgs/loading.gif" width="22" height="22">
 						<span class="desc">刷新中，请稍后...</span>
 					</div>
         </div>
@@ -234,6 +234,7 @@
 			}
 		},
 		components: {
+			
 		}
 	}
 </script>

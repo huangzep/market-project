@@ -1,9 +1,9 @@
 <template>
 	<div class="vote">
-    <div class="company-wrapper" v-show="/vinfo|vrank|vapply/g.test($route.path)">
-      <a class="company-container" :href="state.logoInfo.mallLink">
-        <img :src="state.logoInfo.logoImg" alt="">
-        <span>{{state.logoInfo.companyName}}</span>
+    <div class="company-wrapper" v-show="(/vinfo|vrank|vapply/g.test($route.path)) && logoInfo.mallLink">
+      <a class="company-container" :href="logoInfo.mallLink">
+        <img :src="logoInfo.logoImg" alt="">
+        <span>{{logoInfo.companyName}}</span>
       </a>
     </div>
     <keep-alive exclude="vapplicant">
@@ -20,11 +20,13 @@
   import Store from '@/store/store'
   import {timeOut} from 'common/js/util'
   import {getVoteInfo} from 'services/voteApi'
+  import {getMallInfo} from 'services/wxApi'
 
 	export default {
 		data: () => ({ 
 			state: Store.state,
-      tabShow: true
+      tabShow: true,
+      logoInfo: {}
 		}),
     computed: {
      isJoin() {
@@ -40,6 +42,7 @@
       this.aid = this.$route.query.aid
       this.m = this.$route.query.m
       this._getVoteInfo()
+      this._getMallInfo()
     },
     mounted() {
       //解决安卓手机底部导航弹起
@@ -47,6 +50,7 @@
     },
 		methods: {
       _getVoteInfo() {
+        this.$vux.loading.show({text: 'Loading'})
         getVoteInfo(this.aid).then(res => {
           if (res.return_code === 0) {
             this.res = res.return_data
@@ -57,6 +61,18 @@
           console.log(error)
           this.$vux.toast.text('网络连接失败，请稍后<br/>重试')
         })  
+      },
+      _getMallInfo() {
+        getMallInfo(this.m).then(res => {
+          if (res.return_code === 0) {
+            this.logoInfo = {
+              mallLink: res.return_malllink,
+              logoImg: res.return_data.Logo,
+              companyName: res.return_data.Name
+            }
+            Store.setLogoInfo(this.logoInfo)
+          }
+        })
       },
 			join() {
         let {m, aid} = this
@@ -169,13 +185,13 @@
   }
   .activity-info {
     background: #fff;
-    margin-top: 10px;
-    padding-bottom: 6px;
+    text-align: center;
+    // margin-top: 10px;
+    padding-bottom: 14px;
     .name {
-      display: flex;
-      align-items: center;
-      font-size: 13px;
+      font-size: 12px;
       padding-top: 6px;
+      line-height: 20px;
       .left {
         padding-left: 0.266667rem;
         min-width: 2.133333rem;
@@ -183,6 +199,14 @@
       .right {
         @include ellipsis2();
       }
+    }
+    .title {
+      font-size: 18px;
+      line-height: 20px;
+      word-wrap: break-word;
+      word-break: break-all;
+      padding-bottom: 2px;
+      padding-top: 15px;
     }
   }
   .vscroll {
@@ -193,7 +217,7 @@
     right: 0;
     overflow: hidden;
     min-height: 400px;
-    background-color: #fff;
+    background-color: #f7f7f7;
   }
   /* 参赛按钮 */
   .vote-join {

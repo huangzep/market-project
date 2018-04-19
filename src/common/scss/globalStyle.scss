@@ -2,6 +2,7 @@
 @import './iconfont';
 @import './toast';
 @import './tabbar';
+
 ::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -23,8 +24,7 @@
 html {
   background: #f0f0f0;
   box-sizing: border-box;
-  font-family: 'Microsoft Yahei';
-  color: #3A3633;
+  color: #333;
 }
 
 *,
@@ -35,7 +35,8 @@ html {
 
 body {
   -webkit-overflow-scrolling: touch;
-  font-family: 'Microsoft Yahei';
+  // font-family: 'Microsoft Yahei';
+  font-family:Helvetica;
 }
 
 a:-webkit-any-link {
