@@ -12,11 +12,12 @@
     :listenScroll="true" :pulldown="true" :pullup="true"
     @pullingDown="refresh" @pullingUp="loadMore">
 	    <div class="">
-				<div class="container" ref="container">
+				<div class="container" v-min-h>
 					<div class="ended" v-show="giftList.length && tabIndex === 1">
 						最近3个月已结束的活动
 					</div>
-					<gift-list :tabIndex="tabIndex" :giftList="giftList"></gift-list>
+					<gift-list :tabIndex="tabIndex" :giftList="giftList"
+					@selectItem="selectItem"></gift-list>
 					<div class="daodi" v-show="total !== 0 && total === giftList.length">
 						人家是有底线的~~
 					</div>
@@ -42,9 +43,7 @@
 	import {Tab, TabItem} from 'vux/src/components/tab'
 	import GiftList from 'components/gift-list/gift-list'
 	import Scroll from 'components/scroll/scroll'
-	import CopyRight from 'components/copy-right/copy-right'
-	import {getActList} from 'services/wordActApi'
-
+	import {getFateList} from 'services/wordActApi'
 
 	export default {
 		data: () => ({
@@ -65,19 +64,15 @@
     },
     created() {
     	this.m = this.$route.query.m
-    	document.title = '集字有礼'
+    	document.title = '全民集卡牌'
     	this.getList()
     },
     mounted() {
-    	this._initHeight()
     },
 		methods: {
-			_initHeight() {
-				this.$refs.container.style.minHeight = (window.innerHeight) + 'px'
-			},
 			getList() {
 				this.$vux.loading.show({text: 'Loading'})
-				getActList(this.m, this.tabIndex + 1, this.page).then(res => {
+				getFateList(this.m, this.tabIndex + 1, this.page).then(res => {
 	    		if (res.return_code === 0) {
 	    			this.giftList = this.page === 1 ? res.return_data : [...this.giftList, ...res.return_data]
 	    			this.total = res.return_count
@@ -101,13 +96,21 @@
 					this.$refs.scroll.finishPullDown()
 				}, 20)
 			},
+			selectItem(item) {
+				this.$router.push({
+					path: '/fate',
+					query: {
+						aid: item.Actid,
+						m: this.m
+					}
+				})
+			}
 		},
 		components: {
 			Tab,
 			TabItem,
 			GiftList,
 			Scroll,
-			CopyRight
 		}
 	}
 </script>

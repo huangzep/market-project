@@ -114,7 +114,7 @@
     	this.m = this.$route.query.m
     	this.aid = this.$route.query.aid
     	this.vi = this.$route.query.vi
-    	if (this.vi == 0 || this.vi == 2) this._getVoteUserInfo()
+    	if (!Store.state.voteInfo.hasOwnProperty('Id') || this.vi == 0 || this.vi == 2) this._getVoteUserInfo()
     },
     mounted() {
     },
@@ -122,17 +122,19 @@
 			changeTitle('活动报名')
     },
     beforeRouteLeave(to, from, next) {
-    	changeTitle(Store.state.voteInfo.Title)
+    	if (!/vinfo|vapply|vrank/g.test(to.path)) {
+    		changeTitle(Store.state.voteInfo.Title)
+    	}
     	next()
     },
 		methods: {
 			_getVoteUserInfo() {
 				//投票参选 0 待审核  1 已参选已通过  2 已参选未通过 3 未参选
-				if (this.vi == 0) {this.voted = true}
-				if (this.vi == 2) {this.revote = true}
 				getVoteUserInfo(this.aid, 0).then(res => {
 					if (res.return_code === 0) {
 						extend(this, res.return_data)
+						if (this.Status == 0) {this.voted = true}
+						if (this.Status == 2) {this.revote = true}
 						this.Pic.split(',').forEach((n, i) => {
 							this.preview[i].url = n
 						})

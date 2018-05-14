@@ -1,18 +1,19 @@
 <template>
-	<transition name="fate"
+	<transition name="fate" 
 	@leave="leave"  @after-leave="afterLeave">
-		<div class="win-fate" v-show="showFlag" @touchmove.prevent>
+		<div class="win-fate" ref="winFate" v-show="showFlag" @touchmove.prevent>
 			<div class="fate-wrapper" @click.stop>
 				<div class="fate-content" ref="content">
 					<div class="top">
 						<img :src="pimg('fate-head.png')" alt="">
+						<div class="modal"></div>
 						<span @click="hide"></span>
 					</div>
 					<div class="middle">
-						<img :src="pimg('fate-card.png')" alt="">
-						<span>您已集齐一套卡牌</span>
+						<img :src="cardImg" alt="">
+						<span v-html="cardTxt"></span>
 					</div>
-					<div class="bottom">立即兑换</div>
+					<div class="bottom" @click="confirm">{{ready ? '立即兑换' : '确定'}}</div>
 				</div>
 			</div>
 		</div>
@@ -22,6 +23,17 @@
 <script>
 	
 	export default {
+		props: {
+			cardImg: {
+				type: String
+			},
+			cardTxt: {
+				type: String
+			},
+			ready: {
+				type: Boolean
+			}
+		},
 		data: () => ({ 
 			showFlag: false,
 		}),
@@ -38,24 +50,34 @@
 
     },
 		methods: {
-			show(cx, cy) {
+			show(cx, cy, isScroll) {
 				this.showFlag = true
 				this.cx = cx
 				this.cy = cy
-				console.log(cy)
+				this.isScroll = isScroll
+				this.canHide = false
+				setTimeout(() => {this.canHide = true}, 1000)
 			},
 			hide() {
+				if (!this.canHide) return;
 				this.showFlag = false
 			},
 			leave(el, done) {
 				this.$refs.content.style.transition = 'all 0.5s'
         this.$refs.content.style['transform'] = `translate3d(${this.cx}px, ${this.cy}px, 0) scale(0)`
         this.$refs.content.addEventListener('transitionend', done)
-        this.$emit('destinate', this.cy)
+        if (this.isScroll) this.$emit('destinate', this.cy)
 			},
 			afterLeave() {
 				this.$refs.content.style.transition = ''
         this.$refs.content.style['transform'] = ''
+			},
+			confirm() {
+				this.hide()
+				if (this.ready) {
+					this.isScroll = false
+					this.$emit('toEx')
+				}
 			}
 		},
 		components: {
@@ -74,18 +96,6 @@
 			animation: gift-zoom 1s
 		}
 	}
-	// &.fate-leave-active {
-	// 	animation: .5s;
-	// 	.fate-content {
-	// 		transition: all .5s;
-	// 		transform-origin: 100% 0;
-	// 	}
-	// }
-	// &.fate-leave-to {
-	// 	.fate-content {
-	// 		transform: scale(0);
-	// 	}
-	// }
 	.fate-wrapper {
 		@include wrapper();
 		.fate-content {
@@ -101,6 +111,14 @@
 					display: block;
 					width: 100%;
 					height: 100%;
+				}
+				.modal {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					opacity: 0;
 				}
 				span {
 					position: absolute;

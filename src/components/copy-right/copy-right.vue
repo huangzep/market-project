@@ -36,7 +36,7 @@
     methods: {
       _getMenuList(type = 1) {
         getMenuList(this.m, this.aid, type).then(res => {
-          this.menuList = res.return_data
+          this.menuList = res.return_data || []
           this.companyName = res.return_msg
           this.toulink = res.return_link
           Store.setLogoInfo({
@@ -186,11 +186,6 @@
 }
 /* 集卡页面 */
 .fate{
-  .copy-right {
-    .nav {
-      border-bottom: 1px solid #eee;
-    }
-  }
   .surport {
     &::before {
       transform: scale(1.2);

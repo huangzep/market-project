@@ -225,11 +225,7 @@
 		watch: {
 			data() {
 				setTimeout(() => {
-					if (this.pulldown === 'stop') {
-						this.forceUpdate(true)
-					} else {
-						this._afterPullDown()
-					}
+					this.forceUpdate(true)
 				}, this.refreshDelay)
 			}
 		},
@@ -284,10 +280,15 @@
 	align-items: center;
 	padding: 16px 0;
 }
-
+//下拉刷新按钮颜色
 .vote, .vother, .activity {
 	.before-trigger {
 		color: #ccc;
+	}
+}
+.fate {
+	.before-trigger {
+		color: #666;
 	}
 }
     

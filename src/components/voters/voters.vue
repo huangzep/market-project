@@ -45,7 +45,7 @@
     	vlist(val, oldVal) {
     		if (!val.length) return;
     		this.loadNum = 0
-    		this.$refs.items.style.opacity = 0
+    		// this.$refs.items.style.opacity = 0
 				console.log(this.loadNum)
 				this.loadNum = val.reduce((accu, cur) => {
 					return this.reuse[cur.Id] ? accu + 1 : accu
@@ -80,7 +80,7 @@
 				}
 			},
 			waterFall() {
-				this.$refs.items.style.opacity = 1
+				// this.$refs.items.style.opacity = 1
 				let itemW = this.$refs.item[0].clientWidth
 				let itemY = []
 				//瀑布流布局

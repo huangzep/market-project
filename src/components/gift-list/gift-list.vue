@@ -52,12 +52,7 @@
 				return difTime(start, end)
 			},
 			selectItem(item) {
-				this.$router.push({
-					path: '/word',
-					query: {
-						aid: item.Actid
-					}
-				})
+				this.$emit('selectItem', item)
 			}
 		},
 		components: {

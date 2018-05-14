@@ -52,11 +52,8 @@
       _getVoteInfo() {
         this.$vux.loading.show({text: 'Loading'})
         getVoteInfo(this.aid).then(res => {
-          if (res.return_code === 0) {
-            this.res = res.return_data
-            document.title = this.res.Title
-            Store.setVoteInfo(this.res)
-          }
+          this.res = res.return_data
+          Store.setVoteInfo(this.res)
         }).catch(error => {
           console.log(error)
           this.$vux.toast.text('网络连接失败，请稍后<br/>重试')

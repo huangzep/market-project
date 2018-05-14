@@ -1,7 +1,8 @@
 <template>
 	<div class="turn-table">
 	<div class="wrapper" ref="wrapper">
-			<img class="pan" :src="pimg('zpbg.png')" alt="">
+			<!-- <img class="pan" :src="pimg('zpbg.png')" alt=""> -->
+			<div class="pan"></div>
 			<ul class="gift-container">
 				<li v-for="(item, index) in prizeList" :style="{'transform': `rotate(${index * 360 / prizeList.length}deg)`}">
 					<span>{{item.Name}}</span>
@@ -13,9 +14,9 @@
 		<ul class="light">
 			<li v-for="(item, index) in dots" :style="{'transform': `rotate(${index * 360 / dots.length}deg)`}"></li>
 		</ul>
-		<div class="gobtn" @click="play" v-light>
-			<img v-if="go" src="~common/imgs/go.png" alt="">
-			<img v-else src="~common/imgs/go1.png" alt="">
+		<div class="gobtn" :class="{off:!go}" @click="play" v-light>
+			<!-- <img v-if="go" src="~common/imgs/go.png" alt="">
+			<img v-else src="~common/imgs/go1.png" alt=""> -->
 		</div>
 	</div>
 </template>
@@ -116,6 +117,7 @@
 <style lang="scss" scoped>
 .turn-table {
 	position: relative;
+	z-index: 0;
 	margin: 0 0.4rem;
 	.wrapper {
 		max-width: 9.221333rem;
@@ -125,6 +127,9 @@
 			width: 9.221333rem;
 			height: 9.221333rem;
 			z-index: -1;
+			background-repeat: no-repeat;
+			background-size: 100% auto;
+			background-image: url(/static/images/zpbg.png);
 		}
 		.gift-container {
 			position: relative;
@@ -213,12 +218,18 @@
 		margin-left: -1.226667rem;
 		margin-top: -1.44rem;
 		width: 2.453333rem;
-		height: 2.88rem;
+		height: 3rem;
+		background-repeat: no-repeat;
+		background-size: 100% auto;
+		background-image: url(~common/imgs/go.png);
 		img {
 			display: block;
 			width: 100%;
 			height: 100%;
 		}
+	}
+	.gobtn.off{
+		background-image: url(~common/imgs/go1.png);
 	}
 }
 

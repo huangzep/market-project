@@ -35,10 +35,17 @@ axios.interceptors.response.use(
   response => {
     /*隐藏loading图*/
     setTimeout(() => {Vue.$vux.loading.hide()}, 200)
-    /*处理接口返回码*/
+    /*处理接口返回码：未登录状态*/
     if (response.data.return_code === 30006) {
       Store.setIsLogin(false)
-    } else if (response.data.return_code !== 0 && !(/get.*Prize/gi.test(response.config.url))) {
+      return response.data;
+    }
+    /*抽奖接口不做处理*/
+    if (/Get.*Prize|VoteUserInfo|GetACard/g.test(response.config.url)) {
+      return response.data;
+    }
+    /*其余接口toast错误信息*/
+    if (response.data.return_code !== 0 && response.data.return_code !== 10000) {
       setTimeout(() => {Vue.$vux.toast.text(response.data.return_msg)}, 500)
     }
     return response.data;

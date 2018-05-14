@@ -14,12 +14,4 @@ const router = new VueRouter({
   }
 })
 
-// router.beforeEach((to, from, next) => {
-// 	if (/vinfo|vapply|vrank/gi.test(to.path) && JSON.stringify(Store.state.voteInfo) === "{}") {
-// 		next({path: '/vote/vhome', query: to.query})
-// 	} else {
-// 		next()
-// 	}
-// })
-
 export default router

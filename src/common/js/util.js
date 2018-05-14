@@ -43,12 +43,11 @@ export function defineConfig(config) {
   const apikey = '448B027D72E9FF641ED7F1708F633C05E9DFD8F9BD1775AC3BDE406A0D9B2444E450F7062E66DB5C';
   const salt = 'EE904EB47547F62C0D97F719E96FA43633449D85';
 
-  let sortedParams = sortObjectKey(config.params ? config.params : config.data)
-  let signStr = (salt + apikey + timestamp + random + paramStringify(sortedParams)).trim()
-  //报名、图片请求暂时不加参数加密
-  if (/AddVoteUser|VoteForHim|UploadImg/gi.test(config.url)) {
-    signStr = (salt + apikey + timestamp + random).trim()
-  }
+  // let sortedParams = sortObjectKey(config.params ? config.params : config.data)
+  // let signStr = (salt + apikey + timestamp + random + paramStringify(sortedParams)).trim()
+
+  //请求暂时不加参数加密
+  let signStr = (salt + apikey + timestamp + random).trim()
 
   // 增加自定义headers
   Object.assign(config.headers, {

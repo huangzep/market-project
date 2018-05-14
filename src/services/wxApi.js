@@ -36,7 +36,7 @@ export function upload(m, media_id) {
 }
 
 /**
- * 获取公众号关注
+ * 获取上传图片
  * @param  {} 
  * @return {Promise}
  */
@@ -70,11 +70,12 @@ export function getMenuList(m, actid, type) {
  * @param  {} 
  * @return {Promise}
  */
-export function getGzStatus(actid) {
+export function getGzStatus(actid, type) {
   return xhr({
     url: `/Act/GetCustomerType`,
     params: {
-      actid
+      actid, 
+      type
     }
   })
 }

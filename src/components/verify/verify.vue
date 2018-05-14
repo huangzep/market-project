@@ -24,7 +24,6 @@
     },
     watch: {
     	percent(val) {
-    		console.log(val)
     		if (val < 0) val = 0;
     		if (val > 1) val = 1;
     		let left = val * this.allWidth.remainWidth
@@ -41,9 +40,7 @@
     		sliderWidth: this.$refs.slider.offsetWidth,
     		remainWidth: (this.$refs.verify.clientWidth - this.$refs.slider.offsetWidth)
     	}
-    	setTimeout(() => {
-    		this.confirmPos()
-    	}, 1000)
+    	setTimeout(() => {this.confirmPos()}, 400)
     },
 		methods: {
 			confirmPos() {

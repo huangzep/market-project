@@ -99,6 +99,8 @@
 					window.location.href = this.res.PointLink 
 				} else if (this.actionId === 13) { //会员中心跳转链接
 					window.location.href = this.res.PersonalLink
+				} else if (this.actionId === 14) {  //我的奖品跳转链接
+					window.location.href = this.res.MyPrizeLink
 				}
 			},
 			cancel() {

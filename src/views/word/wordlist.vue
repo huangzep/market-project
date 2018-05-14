@@ -16,7 +16,8 @@
 					<div class="ended" v-show="giftList.length && tabIndex === 1">
 						最近3个月已结束的活动
 					</div>
-					<gift-list :tabIndex="tabIndex" :giftList="giftList"></gift-list>
+					<gift-list :tabIndex="tabIndex" :giftList="giftList"
+					@selectItem="selectItem"></gift-list>
 					<div class="daodi" v-show="total !== 0 && total === giftList.length">
 						人家是有底线的~~
 					</div>
@@ -101,6 +102,14 @@
 					this.$refs.scroll.finishPullDown()
 				}, 20)
 			},
+			selectItem(item) {
+				this.$router.push({
+					path: '/word',
+					query: {
+						aid: item.Actid
+					}
+				})
+			}
 		},
 		components: {
 			Tab,

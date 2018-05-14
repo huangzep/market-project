@@ -48,6 +48,7 @@
 	import wxMixin from '@/mixins/wxMixin'
 	import {getVoteUserList} from 'services/voteApi'
 	import Store from '@/store/store'
+	import {changeTitle} from 'common/js/dom'
 
 	export default {
 		mixins: [scrollMixin, wxMixin],
@@ -79,6 +80,13 @@
     	if (this.$route.query.refresh) {
     		this._getVoteUserList()
     	}
+    	changeTitle('排名榜')
+    },
+    beforeRouteLeave(to, from, next) {
+    	if (!/vinfo|vapply|vrank/g.test(to.path)) {
+    		changeTitle(Store.state.voteInfo.Title)
+    	}
+    	next()
     },
 		methods: {
 			_getVoteUserList() {

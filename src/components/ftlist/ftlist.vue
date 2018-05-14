@@ -1,16 +1,19 @@
 <template>
 	<ul class="ftlist">
-		<li v-for="item in list">
+		<li v-for="item in ftlist">
 			<div class="top">
-				<div class="tit">{{item.t}}</div>
+				<div class="tit">{{item.Name}}</div>
 				<div class="dimg">
-					<img :src="item.img" alt="">
+					<img :src="item.PrizeImage" alt="">
 				</div>
 			</div>
 			<div class="bottom">
-				<div class="p1">{{item.p1}}</div>
-				<div class="p2">集齐特定 <span> 5 </span> 种卡牌兑换</div>
-				<div class="btn">可兑换</div>
+				<div class="p1">{{item.ProductName}}</div>
+				<div class="p2">集齐{{item.ExchangeType ? '任意' : '特定' }} <span> {{item.ExchangeType ? item.ExchangeNum : item.exlist.length}} </span> 种卡牌兑换</div>
+				<div class="btn" :class="{'yel': !item.ready}" v-light
+				@click="selectPrize(item)">
+					{{item.ready ? '可兑换' : '查看'}}
+				</div>
 			</div>
 		</li>
 	</ul>
@@ -19,20 +22,13 @@
 <script>
 	
 	export default {
+		props: {
+			ftlist: {
+				type: Array,
+				default: []
+			}
+		},
 		data: () => ({ 
-			list: [
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-				{t: '安慰特点将', img: 'http://staticf.miduonet.com/houtai/images/jizi/bg_jizi.jpg', p1: '米多网络提供技术支持米多网络提供技术支持持米多网络提供技术支持持米多网络提供技术支持', n: 34},
-
-			]
 		}),
     computed: {
      
@@ -47,7 +43,9 @@
 
     },
 		methods: {
-			
+			selectPrize(prize) {
+				this.$emit('selectPrize', prize)
+			}
 		},
 		components: {
 		
@@ -98,13 +96,16 @@
 			overflow: hidden;
 			border-radius: 0 0 6px 6px;
 			.p1 {
+				text-align: center;
+				font-size: 0.346667rem;
 				line-height: 0.4rem;
 				height: 0.906667rem;
 				padding: 0.186667rem 0.266667rem 0;
 				@include ellipsis2();
 			}
 			.p2 {
-				padding: 0.266667rem 0 0 0.266667rem;
+				padding: 0.266667rem 0 0 0;
+				text-align: center;
 				color: #E3403D;
 				span {
 					font-size: 0.426667rem;

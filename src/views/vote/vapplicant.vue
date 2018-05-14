@@ -1,5 +1,5 @@
 <template>
-	<div class="vapplicant">
+	<div class="vapplicant" ref="applicant">
 		<div class="passing" v-if="pass === 1">
 	  	<div class="vtop">
 		   	<img :src="res.VoteInfo.VoteImage" alt="">
@@ -32,7 +32,8 @@
 		  </div>
 		  <div class="article" style="margin-top: 10px;" v-if="res.Pic">
 		  	<h4>风采展示：</h4>
-		    <div class="manifesto" v-for="item in res.Pic.split(',')">
+		    <div class="manifesto" 
+		    v-for="item in res.Pic.split(',')" v-show="item">
 		    	<img :src="item" alt="">
 		   	</div>
 		  </div>
@@ -55,7 +56,7 @@
 		  </div>
 			<div class="toupiao">
 				<span :class="{'disable': (res.VoteInfo.Status === 3)}"
-			@click="_voteForHim" v-light>{{res.VoteInfo.Status !== 3 ? '帮Ta投一票' : '活动已结束'}}</span>
+			@click="beforeVote" v-light>{{res.VoteInfo.Status !== 3 ? '帮Ta投一票' : '活动已结束'}}</span>
 			</div>
 	  </div>
 	  <div class="nopass" v-if="pass === 2" v-min-h>
@@ -86,11 +87,14 @@
 		  	</div>
 		  </div>
 		</transition>
+		<!-- 滑块验证 -->
+		<pop ref="pop" @success="_voteForHim"></pop>
   </div>
 </template>
 
 <script>
 	import Yes from 'common/imgs/dui_icon.png'
+	import Pop from 'components/pop/pop'
 	import wxMixin from '@/mixins/wxMixin'
 	import {getVoteUserInfo, getUserList, voteForHim} from 'services/voteApi'
 	import Store from '@/store/store'
@@ -138,19 +142,22 @@
     },
 		methods: {
 			_getVoteUserInfo() {
+				// 1.getVoteUserInfo return_code  10000,验证码
+        // 2.VoteForHim return_code  10001，弹窗提示
+        // 3.AddVoteUser return_code  10001.弹窗提示
 				this.$vux.loading.show({text: 'Loading'})
 				getVoteUserInfo(this.aid, this.vid).then(res => {
-					if (res.return_code === 0) {
-						this.res = res.return_data
-						this.count = this.res.ToCount
-						document.title = this.res.VoteInfo.Title
-						//IsInVote即Status 0 待审核  1 已参选已通过  2 已参选未通过 3 未参选
-						//VerifyMode 0 先通过   1 先审核
-						if (this.res.Status === 1 || (this.res.Status === 0 && this.res.VoteInfo.VerifyMode === 0)) {
-							this.pass = 1
-						} else {
-							this.pass = 2
-						}
+					if (res.return_code === 10000) this.isVerify = true;
+					this.res = res.return_data
+					this.count = this.res.ToCount
+					document.title = this.res.VoteInfo.Title
+					// Store.setVoteInfo(this.res.VoteInfo)
+					//IsInVote即Status 0 待审核  1 已参选已通过  2 已参选未通过 3 未参选
+					//VerifyMode 0 先通过   1 先审核
+					if (this.res.Status === 1 || (this.res.Status === 0 && this.res.VoteInfo.VerifyMode === 0)) {
+						this.pass = 1
+					} else {
+						this.pass = 2
 					}
 				}).catch(error => {
 	    		console.log(error)
@@ -177,13 +184,20 @@
 					this.flag = false
 				})	
 			},
+			beforeVote() {
+				if (this.isVerify) {
+					this.$refs.pop.show()
+					return;
+				}
+				this._voteForHim()
+			},
 			_voteForHim() {
 				if (this.res.VoteInfo.Status === 3 || this.flag) return;
 				this.flag = true
-				this.$vux.loading.show({text: 'Loading'})
+				this.$vux.loading.show({text: '投票中...'})
 				let txt, btn, point;
 				voteForHim(this.aid, this.vid).then(res => {
-					this.flag = false
+					setTimeout(() => {this.flag = false}, 3000)
 					if (res.return_code === 0) {
 						this.count = res.return_id //投票剩余票数
 						point = res.return_index //投票获取的积分
@@ -262,6 +276,7 @@
 			}
 		},
 		components: {
+			Pop
 		}
 	}
 </script>

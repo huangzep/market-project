@@ -6,7 +6,7 @@
 				<div class="fate-loading-cbg">
 					<img src="~common/imgs/fate-light.png" alt="" class="">
 				</div>
-				<div class="fate-loading-content">
+				<div class="fate-loading-content" ref="content">
 					<img :src="pimg('fate-front.png')" alt="" class="front">
 				</div>
 			</div>
@@ -116,4 +116,5 @@
     transform: rotate(360deg) translateZ(-1200px);
   }
 }
+
 </style>

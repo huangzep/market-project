@@ -50,16 +50,16 @@
 		},
 		watch: {
 			'state.isLogin'(newVal) {
-				if (!newVal) {
-					this.$refs.confirm.show()
-				} else {
-					this.$refs.confirm.hide()
-				}
+				newVal ? this.$refs.confirm.hide() : this.$refs.confirm.show()
 			},
 			'$route'(newVal) {
-				if (/word$/g.test(newVal.path)) {
+				if (/(word)$/g.test(newVal.path)) {
 					this.aid = newVal.query.aid
-					this._getGzStatus()
+					this._getGzStatus(0)
+				}
+				if (/(fate)$/g.test(newVal.path)) {
+					this.aid = newVal.query.aid
+					this._getGzStatus(1)
 				}
 			}
 		},
@@ -68,12 +68,13 @@
 		mounted() {
 		},
 		methods: {
-			_getGzStatus() {
-				getGzStatus(this.aid).then(res => {
+			_getGzStatus(type) {
+				//用户是否关注公众号
+				getGzStatus(this.aid, type).then(res => {
 					if (res.return_code === 0) {
 						this.comName = res.return_data.CompanyName
 						this.logoImg = res.return_data.WxLogo
-						this.focusFlag = (res.return_data.IsFollow === 1 && res.return_data.GzStatus !== 1) 
+						this.focusFlag = (res.return_data.IsFollow === 1 && res.return_data.GzStatus !== 1)  //开启用户关注开关和用户未关注为true
 						this.codeImg = res.return_data.Url
 					}
 				})

@@ -1,6 +1,6 @@
 <template>
 	<transition name="condition">
-		<div class="condition" v-show="0" @click="hide">
+		<div class="condition" v-show="showFlag" @click="hide">
 			<div class="condition-wrapper" @click.stop>
 				<div class="condition-content">
 					<div class="title">
@@ -8,24 +8,20 @@
 						<span>兑换条件</span>
 						<i class="rb"></i>
 					</div>
-					<div class="txt-head">
-						集齐以下卡牌，即可兑换<span style="color: #FED57C; font-weight: 700;">天猫29元红包、优惠券购物券</span>
-					</div>
-					<div class="specific-wrapper" v-show="1">
-						<ul class="">
-							<li v-for="item in 10">
-								<img class="" :src="pimg('fate-card.png')" alt="">
-								<span>2</span>
+					<div class="txt-head" v-html="htxt"></div>
+					<div class="specific-wrapper" v-show="combineCards.length">
+						<ul class="" :style="{'justify-content': (combineCards.length > 2 ? 'space-between' : 'space-around')}">
+							<li v-for="item in combineCards">
+								<img class="" :src="item.img" alt="" @error="loadImg(item)">
+								<span>{{item.num}}</span>
 							</li>
 						</ul>
 					</div>
-					<div class="will-wrapper" v-show="0">
-						<div class="num"><span>441</span>张</div>
+					<div class="will-wrapper" v-show="!combineCards.length">
+						<div class="num"><span>{{totalCard}}</span>张</div>
 						<div class="txt">当前拥有卡牌数量</div>
 					</div>
-					<div class="txt-bottom">
-						亲，您已集齐本组合卡牌，可以兑换了哦~
-					</div>
+					<div class="txt-bottom" v-html="btxt"></div>
 					<div class="operate">
 						<div @click="cancel" class="operate-btn"
 						v-show="hasCancel">{{cancelBtnText}}</div>
@@ -41,27 +37,64 @@
 	
 	export default {
 		props: {
-			confirmBtnText: {
-				type: String,
-				default: '去选择卡牌兑换'
+			prizeName: {
+				type: String
 			},
-			cancelBtnText: {
-				type: String,
-				default: '再想想'
+			combineCards: {
+				type: Array,
+				default: []
 			},
-			hasCancel: {
-				type: Boolean,
-				default: true
+			totalCard: {
+				type: Number,
+			},
+			needNum: {
+				type: Number,
 			}
 		},
 		data: () => ({ 
 			showFlag: false,
+			ready: false,
+			htxt: '集齐以下卡牌，即可兑换',
+			btxt: '亲，您已集齐本组合卡牌，可以兑换了哦~',
+			confirmBtnText: '确认兑换',
+			cancelBtnText: '再想想',
+			hasCancel: true
 		}),
     computed: {
      
     },
     watch: {
-
+			combineCards(newList) {
+				let ready = true
+				if (newList.length) {
+					this.htxt = `集齐以下卡牌，即可兑换<span style="color: #FED57C; font-weight: 700;">${this.prizeName}</span>`
+					newList.forEach(n => {if (!n.num) ready = false})
+					if (ready) {
+						this.btxt = '亲，您已集齐本组合卡牌，可以兑换了哦~'
+						this.hasCancel = true
+						this.confirmBtnText = '确认兑换'
+					} else {
+						this.btxt = '亲，您还没集齐相应的卡牌哦~'
+						this.hasCancel = false
+						this.confirmBtnText = '继续去抽卡'
+					}
+					this.ready = ready
+					return;
+				}
+				//数量兑换
+				this.htxt = `任意<span style="color: #F84E3D;"> ${this.needNum} </span>张卡牌，即可兑换<span style="color: #FED57C; font-weight: 700;">${this.prizeName}</span>`
+				if (this.totalCard >= this.needNum) {
+					this.btxt = '亲，您已拥有相应卡牌数量，可以兑换了哦~'
+					this.hasCancel = true
+					this.confirmBtnText = '去选择卡牌兑换'
+				} else {
+					this.btxt = '亲，您还没集齐相应的卡牌数量哦~'
+					this.hasCancel = false
+					this.confirmBtnText = '继续去抽卡'
+				}				
+				this.ready = (this.totalCard >= this.needNum)	
+				return;
+			}
     },
     created() {
 
@@ -82,8 +115,18 @@
 			},
 			confirm() {
 				this.hide()
-				this.$emit('confirm')
-			}
+				if (!this.combineCards.length && this.ready) {
+					this.$emit('choice')
+					return;
+				}
+				if (this.combineCards.length && this.ready) {
+					this.$emit('exchange')
+					return;
+				}				
+			},
+			loadImg(item) {
+				item.img = this.pimg('fate-card.png')
+			}		
 		},
 		components: {
 		
@@ -176,7 +219,7 @@
 					padding: 0 0.986667rem;
 					flex-wrap: wrap;
 					max-height: 4.986667rem;
-					overflow-y: scroll;
+					overflow-y: auto;
 					padding-left: 0.986667rem;
 					padding-right: 0.533333rem;
 					margin-right: 0.453333rem;

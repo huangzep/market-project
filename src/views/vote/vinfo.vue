@@ -18,27 +18,27 @@
 						<div>
 							<h1>主办单位</h1>
 							<div class="con">
-								{{state.voteInfo.HostName}}
+								<pre>{{state.voteInfo.HostName}}</pre>
 								<ul>
 									<li v-if="state.voteInfo.CoOrganizer">
 										<div class="bold">协办单位：</div>
-										{{state.voteInfo.CoOrganizer}}
+										<pre>{{state.voteInfo.CoOrganizer}}</pre>
 									</li>
 									<li v-if="state.voteInfo.Organizer">
 										<div class="bold">承办单位：</div>
-										{{state.voteInfo.Organizer}}
+										<pre>{{state.voteInfo.Organizer}}</pre>
 									</li>
 									<li v-if="state.voteInfo.TitleUnit">
 										<div class="bold">冠名单位：</div>
-										{{state.voteInfo.TitleUnit}}
+										<pre>{{state.voteInfo.TitleUnit}}</pre>
 									</li>
 									<li v-if="state.voteInfo.Supporting">
 										<div class="bold">赞助单位：</div>
-										{{state.voteInfo.Supporting}}
+										<pre>{{state.voteInfo.Supporting}}</pre>
 									</li>
 									<li v-if="state.voteInfo.ThanksUnit">
 										<div class="bold">鸣谢单位：</div>
-										{{state.voteInfo.ThanksUnit}}
+										<pre>{{state.voteInfo.ThanksUnit}}</pre>
 									</li>
 								</ul>
 							</div>
@@ -78,6 +78,7 @@
 <script>
 	import Store from '@/store/store'
 	import wxMixin from '@/mixins/wxMixin'
+	import {changeTitle} from 'common/js/dom'
 
 	export default {
 		mixins: [wxMixin],
@@ -85,16 +86,22 @@
 			state: Store.state 
 		}),
 		computed: {
-		
 		},
 		watch: {
-
 		},
 		created() {
-
 		},
 		mounted() {
 		},
+		activated() {
+			changeTitle('奖品规则')
+    },
+    beforeRouteLeave(to, from, next) {
+    	if (!/vinfo|vapply|vrank/g.test(to.path)) {
+    		changeTitle(Store.state.voteInfo.Title)
+    	}
+    	next()
+    },
 		methods: {
 		},
 		components: {
@@ -236,6 +243,10 @@
 		}
 		.copy-container {
 			padding-bottom: 0;
+		}
+		pre {
+			font-family: "Microsoft YaHei";
+			font-size: .373333rem;
 		}
 	}
 </style>

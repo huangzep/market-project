@@ -137,42 +137,4 @@
 	}
 }
 
-
-.table.m-red {
-	.roll {
-		li {
-			p {
-				color: #fff;
-				span {color: #fbd439}
-			}
-			&::after {
-		    border-bottom-color: #e8a4a3;
-			}
-		}
-	}
-}
-
-.table.m-pink {
-	.roll {
-		li {
-			p {
-				color: #fff;
-				span {color: #fbd439}
-			}
-			&::after {
-		    border-bottom-color: #e8a4a3;
-			}
-		}
-	}
-}
-
-.table.m-yello {
-	.roll {
-		li {
-			&::after {
-		    border-bottom-color: #006b21;
-			}
-		}
-	}
-}
 </style>

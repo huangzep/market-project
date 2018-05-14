@@ -1,7 +1,6 @@
 /*活动页面共用*/
 import Confirm from 'components/confirm/confirm'
 import Inform from 'components/inform/inform'
-import CopyRight from 'components/copy-right/copy-right'
 import {getWxdata} from 'services/wxApi'
 import {getActivityInfo} from 'services/cardActApi'
 import {difSeconds} from 'common/js/util'
@@ -24,6 +23,7 @@ export default {
     endMsg: '',
     ishavepoint: true,
     isBefore: false,
+    isLate: false,
     isDayOut: false,
     isLimitVip: false,
     isLimitLabel: false,
@@ -84,6 +84,15 @@ export default {
           }
         }
       })
+    },
+    showNum(num) {
+      this.actionId = 0
+      this.hasCancel = false
+      this.confirmBtnText = '朕知道了'
+      this.confirmContent = `恭喜您！<br/>扫码获得${num}次抽奖机会，<br/>快去试试手气吧~`
+      this.$refs.confirm.show()
+      //消除url中num参数
+      window.history.replaceState({}, "saoma", location.href.replace(/&num=\d+/, ''))
     },
     showInfo(text) {
       this.infoTitle = '活动说明'
@@ -156,6 +165,10 @@ export default {
       //活动未开始弹框
       if (this.isBefore) {
         this.showBefore(this.res.StartDateTime)
+        return;
+      }
+      if (this.isLate) {
+        this.$vux.toast.text('抱歉，活动时间已结束')
         return;
       }
       //当天活动时间未开始
@@ -313,6 +326,5 @@ export default {
   components: {
     Confirm,
     Inform,
-    CopyRight
   }
 }

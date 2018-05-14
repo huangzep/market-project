@@ -60,7 +60,7 @@
 		<!-- loading动画 -->
 		<loading ref="loading" :model="res.TemplateType || ''"></loading>
 		<!-- 滑块验证 -->
-		<pop ref="pop" @success="showWord"></pop>
+		<!-- <pop ref="pop" @success="showWord"></pop> -->
 	</div>
 </template>
 
@@ -72,7 +72,7 @@
 	import WinWord from 'components/win-word/win-word'
 	import Loading from 'components/loading/loading'
 	import Scroll from 'components/scroll/scroll'
-	import Pop from 'components/pop/pop'
+	// import Pop from 'components/pop/pop'
 	import actMixin from '@/mixins/actMixin'
 	import {getActInfo, getPrize, exchangePrize} from 'services/wordActApi'
 	import {getWxdata} from 'services/wxApi'
@@ -116,13 +116,11 @@
       }
     },
     watch: {
-    	
     },
     created() {
-    	this.num = this.$route.query.num
     },
     mounted() {
-  		if (this.num) this.showNum(this.num)
+  		if (this.n = this.$route.query.num) this.showNum(this.n)
     },
 		methods: {
 			_getAll() {
@@ -145,10 +143,7 @@
 	    		} else  {
 	    			this.canPlay = false
 	    		}
-	    	}).catch(error => {
-	    		console.log(error)
-					// this.$vux.toast.text('网络连接失败，请稍后<br/>重试')
-				})	
+	    	})
 			},
 			refresh() {
 				clearTimeout(this.timer)
@@ -158,13 +153,6 @@
 					this._getAll()
 					this.$refs.scroll.finishPullDown()
 				}, 20)
-			},
-			showNum(num) {
-				this.actionId = 0
-				this.hasCancel = false
-				this.confirmBtnText = '朕知道了'
-				this.confirmContent = `恭喜您！<br/>扫码获得${num}次抽奖机会，<br/>快去试试手气吧~`
-				this.$refs.confirm.show()
 			},
 			showTips() {
 				if (!this.canPlay && timeOut(this.res.EndTime)) {
@@ -176,11 +164,6 @@
   				this.showWay()
 					return;
   			}
-				// //常规活动，有积分但抽字次数已用完
-				// if (!this.canPlay && this.res.Type === 0) {
-				// 	this.showEnd('抱歉，当前抽字次数已用完，请明天再来~')
-				// 	return;
-				// }
 				//活动时间未开始弹框
 				if (!timeOut(this.res.StartTime)) {
 					this.showBefore(this.res.StartTime)
@@ -260,8 +243,8 @@
 			},
 			action() {
 				if (this.actionId === 1) {
-					// this.showWord()
-					this.$refs.pop.show()
+					this.showWord()
+					// this.$refs.pop.show()
 				} else if (this.actionId === 2) {
 					window.location.href = this.res.PointLink
 				} else if (this.actionId === 3) {
@@ -329,7 +312,7 @@
 			WinWord,
 			Loading,
 			Scroll,
-			Pop
+			// Pop
 		}
 	}
 </script>

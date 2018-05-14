@@ -31,9 +31,6 @@
 			  </div>
 				<div class="voters-wrapper" v-if="total > 0">
 				 	<voters :vlist="vlist" :canVote="canVote"></voters>
-				 	<!-- <div class="daodi" v-show="total !== 0 && total === vlist.length">
-						人家是有底线的~~
-					</div> -->
 				</div>
 				<!-- 底部版权 -->
 		    <div class="copy-container" v-show="total >= 0">
@@ -69,13 +66,14 @@
     },
     watch: {
     	$route(val, oldVal) {
-    		if (/apply/.test(oldVal.path)) {
+    		if (/vhome/.test(val.path) && /apply/.test(oldVal.path)) {
     			this._getVoteInfo()
 	    		this._getVoteUserList()
     		}
     	},
-    	'state.voteInfo'(val) {
+    	'state.voteInfo'(val, oldVal) {
     		this.setTimeNews(val)
+    		document.title = val.Title
     	}
     },
     created() {
@@ -94,12 +92,8 @@
 			_getVoteInfo() {
 				this.update = true
 				getVoteInfo(this.aid).then(res => {
-					if (res.return_code === 0) {
-						this.res = res.return_data
-						document.title = this.res.Title
-						Store.setVoteInfo(this.res)
-						this.setTimeNews(this.res)						
-					}
+					this.res = res.return_data
+					this.setTimeNews(this.res)						
 				}).catch(error => {
 	    		console.log(error)
 					this.update = false

@@ -15,7 +15,7 @@
 					</div>
 					<div class="gift-name" v-html="giftText"></div>
 					<div class="btn">
-						<a :href="prizeLink" @click="hide">立即领取</a>
+						<a :href="prizeLink" @click="hide" v-html="atxt"></a>
 					</div>
 				</div>
 				<div class="del" @click="hide"></div>
@@ -35,7 +35,12 @@
 				type: String,
 			},
 			prizeLink: {
-				type: String
+				type: String,
+				default: null
+			},
+			atxt: {
+				type: String,
+				default: '立即领取'
 			}
 		},
 		data: () => ({ 

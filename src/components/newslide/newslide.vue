@@ -48,6 +48,7 @@
 				this.timer = setInterval(() => {
 					this.newsList.shift()
 					setTimeout(() => {
+						if (this.newsList.length) return;
 						this.i = (this.i === this.messageList.length - 1 || this.messageList.length === 1) ? 0 : (this.i + 1)
 						this.newsList.push(this.messageList[this.i])
 					}, 1500)

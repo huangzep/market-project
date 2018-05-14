@@ -1,13 +1,12 @@
 <template>
 	<div class="test" style="background: #fff;height: 1000px;">
-    <iframe width="400" height="800" src="http://192.168.5.121:3000/dist/page/%E5%85%A8%E6%B0%91%E9%9B%86%E5%8D%A1/%E6%96%B0%E5%BB%BA%E6%B4%BB%E5%8A%A8.html" frameborder="0"></iframe>
-    <div class="" @click="change" style="height: 3434px;">
+    <!-- <div class="" @click="change" style="height: 3434px;">
       {{res.a}}
     </div>
 		<button @touchstart.prevent.stop="start" @touchend.prevent.stop="end"
-		@contextmenu.prevent>按住说话</button>
+		@contextmenu.prevent>按住说话</button> -->
     <!-- <button @click="end">结束说话</button> -->
-		<button @click="play">播放语音</button>
+		<!-- <button @click="play">播放语音</button>
     <button @click="translate">智能识别</button>
     <div class="">
       {{translateResult}}
@@ -18,7 +17,14 @@
     <button @click="()=>{this.$refs.pop.show()}"></button>
     <pop ref="pop"></pop>
     <apply></apply>
-
+ -->
+    <ul>
+      <li v-for="(item, index) in list" @click="click(item, index)" @touchstart="change"
+      style="color: red;">
+        {{computer}}
+      </li>
+    </ul>
+    <input type="text" v-model="num" @change="change">
 	</div>
 </template>
 
@@ -34,25 +40,35 @@
 		data: () => ({ 
       localId: '',
 			translateResult: '',
-      res: {}
+      res: {},
+      state: {
+        list: [3, 3, 4],
+        islogin: false,
+        info: {}
+      },
+      list: [],
+      num: 0
 		}),
     computed: {
-     
+     computer() {
+      this.localId = 34
+      return this.localId + 34;
+     }
     },
     watch: {
 
     },
     created() {
-      this.aid = this.$route.query.aid
-      this._wxShare()
-      this.res.a = 343
     },
     mounted() {
-      
+
     },
 		methods: {
       change() {
-        this.res.a = 99
+        console.log(this.num)
+        this.num = 34
+      },
+      click(item, index) {
       },
 			_getAll() {
 
@@ -147,4 +163,5 @@ button {
 	padding: 60px;
 	width: 100px;
 }
+
 </style>

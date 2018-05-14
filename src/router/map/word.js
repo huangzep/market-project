@@ -1,5 +1,3 @@
-// import word from 'views/word/'
-// import wordlist from 'views/word/wordlist'
 /**
  * 集字、集卡模块
  */
@@ -29,13 +27,6 @@ export default [
 	  },
 	},
 	{
-		path: '/fatechoice',
-		name: 'fatechoice',
-		component: resolve => {
-	    require(['views/word/fatechoice'], resolve)
-	  },
-	},
-	{
 		path: '/fatelist',
 		name: 'fatelist',
 		component: resolve => {
@@ -43,7 +34,7 @@ export default [
 	  },
 	},
 	{
-		path: '/test',
+		path: '/test/mo',
 		name: 'test',
 		component: resolve => {
 	    require(['views/word/test'], resolve)

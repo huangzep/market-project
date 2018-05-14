@@ -1,31 +1,27 @@
 <template>
-	<ul class="cardlist" :class="[{'change': change}, clstype]">
-		<li class="" ref="cards"
-		v-for="item in list" @click="item.on = !item.on">
-			<img class="" :src="pimg('fate-card.png')" alt="">
+	<ul class="cardlist" :class="clstype">
+		<li :class="{'no': !item.num}" ref="cards" :key="item.id"
+		v-for="(item, index) in cardList">
+			<img :src="item.img" alt="" @error="loadImg(item)">
 			<i></i>
-			<span>2</span>
-			<em :class="{on: item.on}"></em>
+			<span>{{item.num}}</span>
 		</li>
 	</ul>
 </template>
 
 <script>
-	//2~15张，一行3张；16~24张，一行4张；25~32张，一行5张；
+
 	export default {
 		props: {
-			change: {
-				type: Boolean,
-				default: false
+			cardList: {
+				type: Array
 			}
 		},
 		data: () => ({ 
-			list: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
 		}),
     computed: {
-     clstype() {
-     	if (this.change) return '';
-     	let len = this.list.length;
+     clstype() {   //2~15张，一行3张；16~24张，一行4张；25~32张，一行5张；
+     	let len = this.cardList.length;
      	if (len == 2) return 'two';
      	if (len <= 15) return 'three';
      	if (len <= 24) return 'four';
@@ -36,18 +32,15 @@
 
     },
     created() {
-    	this.list.forEach((item) => {
-    		this.$set(item, 'on', false)
-    	})
     },
     mounted() {
-console.log(this.$refs.cards[3].offset)
     },
 		methods: {
-			
+			loadImg(item) {
+				item.img = this.pimg('fate-card.png')
+			}
 		},
 		components: {
-		
 		}
 	}
 </script>

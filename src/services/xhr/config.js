@@ -6,6 +6,7 @@
 let rootPath;
 if (process.env.NODE_ENV.trim() === 'development') {
 	rootPath = '//ac.miduonet.com/api'
+	//rootPath = '//ac.api.miduonet.com/api'
 } else {
 	rootPath = '/api'
 }

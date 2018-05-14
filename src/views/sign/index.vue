@@ -321,7 +321,7 @@
                 content+= '<div class="con">';
                 for(var i = 0;i<setSignData.length;i++){
                   if(i==0){
-                    content+='<div>您今天已获得的奖励如下：</div>';
+                    content+='<div>本次签到，您获得了以下奖励：</div>';
                     content+='<ul class="award">';
                     if(setSignData[i].Point>0||setSignData[i].Point_ts>0){
                       var pointNum = setSignData[i].Point + setSignData[i].Point_ts;
@@ -495,7 +495,7 @@
 
                 content+='<div class="hint"><span class="fc-red">* </span>如未关注公众号，需到微信服务通知里领取红包哦</div></div>';
                 this.$layer.dialog({
-                    title: ['您已签到'], 
+                    title: ['签到成功'], 
                     content: content,
                     btn: ['知道了',this.res.BtnName],
                     shadeClose: false,
